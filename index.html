@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Motorcycle Bio 2</title>
+    <title>Motorcycle Bio 3</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -108,6 +108,8 @@
             const isLogin = event.submitter.id === 'login-btn';
             const endpoint = isLogin ? '/login' : '/register';
 
+            console.log('Form submitted:', { username, email, password });
+
             // Clear previous error messages
             document.getElementById('username-error').innerText = '';
             document.getElementById('email-error').innerText = '';
@@ -116,6 +118,8 @@
             // Validate username
             if (username.length > 6) {
                 document.getElementById('username-error').innerText = 'Username must be no longer than 6 characters.';
+                console.log('Validation failed: Username too long');
+                alert('Validation Error!');
                 return;
             }
 
@@ -123,6 +127,8 @@
             const emailRegEx = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegEx.test(email)) {
                 document.getElementById('email-error').innerText = 'Please enter a valid email address.';
+                console.log('Validation failed: Invalid email');
+                alert('Validation Error!');
                 return;
             }
 
@@ -130,6 +136,8 @@
             const passwordRegEx = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()]).{8,}$/;
             if (!passwordRegEx.test(password)) {
                 document.getElementById('password-error').innerText = 'Password must be at least 8 characters long, include a number, an uppercase letter, and a special character.';
+                console.log('Validation failed: Weak password');
+                alert('Validation Error!');
                 return;
             }
 
@@ -143,18 +151,21 @@
                 });
 
                 const data = await response.json();
+                console.log('Server response:', data);
+
                 if (response.ok) {
-                    alert(data.message);
+                    alert('Success!');
                     if (isLogin) {
                         localStorage.setItem('accessToken', data.accessToken);
                         localStorage.setItem('refreshToken', data.refreshToken);
                         document.getElementById('logout-btn').style.display = 'block';
                     }
                 } else {
-                    alert(data.message);
+                    alert('Fail!');
                 }
             } catch (error) {
                 console.error('Error:', error);
+                alert('Fail!');
             }
         });
 
