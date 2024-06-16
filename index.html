@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Motorcycle Bio</title>
+    <title>Motorcycle Bio 2</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -34,10 +34,11 @@
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             display: flex;
-            flex-direction: column; /* Use column direction for layout */
+            flex-direction: column;
         }
         .login-form input[type="text"],
         .login-form input[type="password"],
+        .login-form input[type="email"],
         .login-form input[type="submit"],
         .login-form button {
             width: 100%;
@@ -60,7 +61,12 @@
             background-color: #555;
         }
         .login-form button {
-            display: none; /* Hide logout button initially */
+            display: none;
+        }
+        .error-message {
+            color: red;
+            margin-top: -10px;
+            margin-bottom: 10px;
         }
     </style>
 </head>
@@ -77,8 +83,16 @@
             <form id="auth-form">
                 <label for="username">Username:</label>
                 <input type="text" id="username" name="username" required>
+                <div id="username-error" class="error-message"></div>
+                
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+                <div id="email-error" class="error-message"></div>
+                
                 <label for="password">Password:</label>
                 <input type="password" id="password" name="password" required>
+                <div id="password-error" class="error-message"></div>
+                
                 <input type="submit" id="login-btn" value="Login">
                 <input type="submit" id="register-btn" value="Register" style="margin-left: 10px;">
                 <button type="button" id="logout-btn">Logout</button>
@@ -89,9 +103,35 @@
         document.getElementById('auth-form').addEventListener('submit', async function(event) {
             event.preventDefault();
             const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             const isLogin = event.submitter.id === 'login-btn';
             const endpoint = isLogin ? '/login' : '/register';
+
+            // Clear previous error messages
+            document.getElementById('username-error').innerText = '';
+            document.getElementById('email-error').innerText = '';
+            document.getElementById('password-error').innerText = '';
+
+            // Validate username
+            if (username.length > 6) {
+                document.getElementById('username-error').innerText = 'Username must be no longer than 6 characters.';
+                return;
+            }
+
+            // Validate email
+            const emailRegEx = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegEx.test(email)) {
+                document.getElementById('email-error').innerText = 'Please enter a valid email address.';
+                return;
+            }
+
+            // Validate password
+            const passwordRegEx = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()]).{8,}$/;
+            if (!passwordRegEx.test(password)) {
+                document.getElementById('password-error').innerText = 'Password must be at least 8 characters long, include a number, an uppercase letter, and a special character.';
+                return;
+            }
 
             try {
                 const response = await fetch(endpoint, {
@@ -99,7 +139,7 @@
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ username, password })
+                    body: JSON.stringify({ username, email, password })
                 });
 
                 const data = await response.json();
