@@ -106,7 +106,7 @@
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             const isLogin = event.submitter.id === 'login-btn';
-            const endpoint = isLogin ? 'https://smearsmear.com/login' : 'https://smearsmear.com/register';
+            const endpoint = isLogin ? 'http://ec2-3-144-146-118.us-east-2.compute.amazonaws.com:8080/login' : 'http://ec2-3-144-146-118.us-east-2.compute.amazonaws.com:8080/register';
 
             console.log('Form submitted:', { username, email, password });
 
