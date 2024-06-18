@@ -17,6 +17,12 @@
             color: #fff;
             padding: 10px 0;
             text-align: center;
+            position: relative;
+        }
+        .username-display {
+            position: absolute;
+            right: 10px;
+            top: 10px;
         }
         .container {
             padding: 20px;
@@ -73,12 +79,13 @@
 <body>
     <header>
         <h1>Motorcycle Bio</h1>
+        <div class="username-display" id="username-display"></div>
     </header>
     <div class="container">
         <div class="bio">
             <p>The motorcycle, an iconic symbol of freedom and adventure, has a storied history that spans over a century. Originally developed as a motorized bicycle in the late 19th century, it quickly evolved into a powerful and versatile machine. Known for their speed, agility, and efficiency, motorcycles have been utilized for a variety of purposes, from military operations to recreational riding. With advancements in technology, modern motorcycles boast impressive features like advanced safety systems, high-performance engines, and sleek, aerodynamic designs. Today, they continue to captivate enthusiasts around the world, embodying a unique blend of engineering excellence and the thrill of the open road.</p>
         </div>
-        <div class="login-form">
+        <div class="login-form" id="login-form">
             <h2>Login/Register</h2>
             <form id="auth-form">
                 <label for="username">Username:</label>
@@ -159,6 +166,8 @@
                         localStorage.setItem('accessToken', data.accessToken);
                         localStorage.setItem('refreshToken', data.refreshToken);
                         document.getElementById('logout-btn').style.display = 'block';
+                        document.getElementById('login-form').style.display = 'none';
+                        document.getElementById('username-display').innerText = `Welcome, ${username}`;
                     }
                 } else {
                     alert(`Fail! Reason: ${data.message || 'Unknown error'}`);
@@ -174,11 +183,16 @@
             localStorage.removeItem('refreshToken');
             alert('Logged out successfully');
             document.getElementById('logout-btn').style.display = 'none';
+            document.getElementById('login-form').style.display = 'flex';
+            document.getElementById('username-display').innerText = '';
         });
 
         document.addEventListener('DOMContentLoaded', function() {
             if (localStorage.getItem('accessToken')) {
                 document.getElementById('logout-btn').style.display = 'block';
+                document.getElementById('login-form').style.display = 'none';
+                const username = 'User'; // Default to "User" if username is not stored
+                document.getElementById('username-display').innerText = `Welcome, ${username}`;
             }
         });
     </script>
