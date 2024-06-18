@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Motorcycle Bio</title>
+    <title>Motorcycle Bio 2</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -130,13 +130,15 @@
                 return;
             }
 
-            // Validate email
-            const emailRegEx = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegEx.test(email)) {
-                document.getElementById('email-error').innerText = 'Please enter a valid email address.';
-                console.log('Validation failed: Invalid email');
-                alert('Validation Error!');
-                return;
+            // Validate email only if registering
+            if (!isLogin) {
+                const emailRegEx = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegEx.test(email)) {
+                    document.getElementById('email-error').innerText = 'Please enter a valid email address.';
+                    console.log('Validation failed: Invalid email');
+                    alert('Validation Error!');
+                    return;
+                }
             }
 
             // Validate password
