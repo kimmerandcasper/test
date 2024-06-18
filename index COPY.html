@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Motorcycle Bio 3</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 0;
+            text-align: center;
+        }
+        .container {
+            padding: 20px;
+        }
+        .bio {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        .login-form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+        }
+        .login-form input[type="text"],
+        .login-form input[type="password"],
+        .login-form input[type="email"],
+        .login-form input[type="submit"],
+        .login-form button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .login-form input[type="submit"],
+        .login-form button {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .login-form input[type="submit"]:hover,
+        .login-form button:hover {
+            background-color: #555;
+        }
+        .login-form button {
+            display: none;
+        }
+        .error-message {
+            color: red;
+            margin-top: -10px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Motorcycle Bio</h1>
+    </header>
+    <div class="container">
+        <div class="bio">
+            <p>The motorcycle, an iconic symbol of freedom and adventure, has a storied history that spans over a century. Originally developed as a motorized bicycle in the late 19th century, it quickly evolved into a powerful and versatile machine. Known for their speed, agility, and efficiency, motorcycles have been utilized for a variety of purposes, from military operations to recreational riding. With advancements in technology, modern motorcycles boast impressive features like advanced safety systems, high-performance engines, and sleek, aerodynamic designs. Today, they continue to captivate enthusiasts around the world, embodying a unique blend of engineering excellence and the thrill of the open road.</p>
+        </div>
+        <div class="login-form">
+            <h2>Login/Register</h2>
+            <form id="auth-form">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required>
+                <div id="username-error" class="error-message"></div>
+                
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+                <div id="email-error" class="error-message"></div>
+                
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+                <div id="password-error" class="error-message"></div>
+                
+                <input type="submit" id="login-btn" value="Login">
+                <input type="submit" id="register-btn" value="Register" style="margin-left: 10px;">
+                <button type="button" id="logout-btn">Logout</button>
+            </form>
+        </div>
+    </div>
+    <script>
+        document.getElementById('auth-form').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const isLogin = event.submitter.id === 'login-btn';
+            const endpoint = isLogin ? 'http://ec2-3-144-146-118.us-east-2.compute.amazonaws.com:8080/login' : 'http://ec2-3-144-146-118.us-east-2.compute.amazonaws.com:8080/register';
+
+            console.log('Form submitted:', { username, email, password });
+
+            // Clear previous error messages
+            document.getElementById('username-error').innerText = '';
+            document.getElementById('email-error').innerText = '';
+            document.getElementById('password-error').innerText = '';
+
+            // Validate username
+            if (username.length > 6) {
+                document.getElementById('username-error').innerText = 'Username must be no longer than 6 characters.';
+                console.log('Validation failed: Username too long');
+                alert('Validation Error!');
+                return;
+            }
+
+            // Validate email
+            const emailRegEx = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegEx.test(email)) {
+                document.getElementById('email-error').innerText = 'Please enter a valid email address.';
+                console.log('Validation failed: Invalid email');
+                alert('Validation Error!');
+                return;
+            }
+
+            // Validate password
+            const passwordRegEx = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()]).{8,}$/;
+            if (!passwordRegEx.test(password)) {
+                document.getElementById('password-error').innerText = 'Password must be at least 8 characters long, include a number, an uppercase letter, and a special character.';
+                console.log('Validation failed: Weak password');
+                alert('Validation Error!');
+                return;
+            }
+
+            try {
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, email, password })
+                });
+
+                const data = await response.json();
+                console.log('Server response:', data);
+
+                if (response.ok) {
+                    alert('Success!');
+                    if (isLogin) {
+                        localStorage.setItem('accessToken', data.accessToken);
+                        localStorage.setItem('refreshToken', data.refreshToken);
+                        document.getElementById('logout-btn').style.display = 'block';
+                    }
+                } else {
+                    alert(`Fail! Reason: ${data.message || 'Unknown error'}`);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert(`Fail! Reason: ${error.message}`);
+            }
+        });
+
+        document.getElementById('logout-btn').addEventListener('click', function() {
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('refreshToken');
+            alert('Logged out successfully');
+            document.getElementById('logout-btn').style.display = 'none';
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            if (localStorage.getItem('accessToken')) {
+                document.getElementById('logout-btn').style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>
