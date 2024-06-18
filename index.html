@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Motorcycle Bio 2</title>
+    <title>Motorcycle Bio</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -181,7 +181,7 @@
             localStorage.removeItem('refreshToken');
             alert('Logged out successfully');
             document.getElementById('logout-btn').style.display = 'none';
-            document.getElementById('auth-form').reset();
+            document.getElementById('auth-form').reset(); // Reset the form fields
             document.getElementById('auth-form').style.display = 'flex';
             document.getElementById('username-display').innerText = '';
         });
@@ -190,7 +190,7 @@
             if (localStorage.getItem('accessToken')) {
                 document.getElementById('logout-btn').style.display = 'block';
                 document.getElementById('auth-form').style.display = 'none';
-                const username = 'User';
+                const username = 'User'; // Default to "User" if username is not stored
                 document.getElementById('username-display').innerText = `Welcome, ${username}`;
             }
         });
