@@ -102,8 +102,8 @@
                 
                 <input type="submit" id="login-btn" value="Login">
                 <input type="submit" id="register-btn" value="Register" style="margin-left: 10px;">
-                <button type="button" id="logout-btn">Logout</button>
             </form>
+            <button type="button" id="logout-btn">Logout</button>
         </div>
     </div>
     <script>
@@ -165,7 +165,7 @@
                     localStorage.setItem('accessToken', data.accessToken);
                     localStorage.setItem('refreshToken', data.refreshToken);
                     document.getElementById('logout-btn').style.display = 'block';
-                    document.getElementById('login-form').style.display = 'none';
+                    document.getElementById('auth-form').style.display = 'none';
                     document.getElementById('username-display').innerText = `Welcome, ${username}`;
                 } else {
                     alert(`Fail! Reason: ${data.message || 'Unknown error'}`);
@@ -181,14 +181,14 @@
             localStorage.removeItem('refreshToken');
             alert('Logged out successfully');
             document.getElementById('logout-btn').style.display = 'none';
-            document.getElementById('login-form').style.display = 'flex';
+            document.getElementById('auth-form').style.display = 'flex';
             document.getElementById('username-display').innerText = '';
         });
 
         document.addEventListener('DOMContentLoaded', function() {
             if (localStorage.getItem('accessToken')) {
                 document.getElementById('logout-btn').style.display = 'block';
-                document.getElementById('login-form').style.display = 'none';
+                document.getElementById('auth-form').style.display = 'none';
                 const username = 'User'; // Default to "User" if username is not stored
                 document.getElementById('username-display').innerText = `Welcome, ${username}`;
             }
