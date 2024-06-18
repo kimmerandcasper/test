@@ -181,6 +181,7 @@
             localStorage.removeItem('refreshToken');
             alert('Logged out successfully');
             document.getElementById('logout-btn').style.display = 'none';
+            document.getElementById('auth-form').reset();
             document.getElementById('auth-form').style.display = 'flex';
             document.getElementById('username-display').innerText = '';
         });
@@ -189,7 +190,7 @@
             if (localStorage.getItem('accessToken')) {
                 document.getElementById('logout-btn').style.display = 'block';
                 document.getElementById('auth-form').style.display = 'none';
-                const username = 'User'; // Default to "User" if username is not stored
+                const username = 'User';
                 document.getElementById('username-display').innerText = `Welcome, ${username}`;
             }
         });
