@@ -162,13 +162,11 @@
 
                 if (response.ok) {
                     alert('Success!');
-                    if (isLogin) {
-                        localStorage.setItem('accessToken', data.accessToken);
-                        localStorage.setItem('refreshToken', data.refreshToken);
-                        document.getElementById('logout-btn').style.display = 'block';
-                        document.getElementById('login-form').style.display = 'none';
-                        document.getElementById('username-display').innerText = `Welcome, ${username}`;
-                    }
+                    localStorage.setItem('accessToken', data.accessToken);
+                    localStorage.setItem('refreshToken', data.refreshToken);
+                    document.getElementById('logout-btn').style.display = 'block';
+                    document.getElementById('login-form').style.display = 'none';
+                    document.getElementById('username-display').innerText = `Welcome, ${username}`;
                 } else {
                     alert(`Fail! Reason: ${data.message || 'Unknown error'}`);
                 }
