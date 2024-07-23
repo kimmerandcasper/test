@@ -65,14 +65,14 @@ app.post('/register', async (req, res) => {
 });
 
 app.post('/login', async (req, res) => {
-    const { email, password } = req.body;
-    console.log('Login attempt:', { email, password });
+    const { username, password } = req.body;
+    console.log('Login attempt:', { username, password });
     try {
-        const user = await User.findOne({ email, password });
+        const user = await User.findOne({ username, password });
         if (user) {
             res.status(200).json({ message: 'Login successful', accessToken: 'fake-access-token', refreshToken: 'fake-refresh-token' });
         } else {
-            res.status(401).json({ message: 'Invalid email or password' });
+            res.status(401).json({ message: 'Invalid username or password' });
         }
     } catch (error) {
         console.log('Login error:', error);
